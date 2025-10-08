@@ -61,7 +61,28 @@ public class Main {
             System.out.println(Arrays.toString(c_par));
         }
         System.out.println("Parallel addition took " + (endTime - startTime) + " nanoseconds.");
+
+        MyThread2[] threads2 = new MyThread2[VEC_SIZE];
+        startTime = System.currentTimeMillis();
+        for (int i = 0; i < VEC_SIZE; i++) {
+            threads2[i] = new MyThread2(a , b , c_par , i , VEC_SIZE , VEC_SIZE);
+            threads2[i].start();
+        }
+        for (int i = 0; i < VEC_SIZE; i++) {
+            try{
+                threads2[i].join();
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+        endTime = System.currentTimeMillis();
+        if (VEC_SIZE < 10) {
+            System.out.println(Arrays.toString(c_par));
+        }
+        System.out.println("Parallel addition (one thread per element) took " + (endTime - startTime) + " nanoseconds.");
     }
+
+
 
     // Generates an array of random integers between 0 (inclusive) and upperBound (exclusive)
     public static int[] generateArray(int size, int upperBound) {
@@ -91,6 +112,28 @@ public class Main {
                 c[i] = a[i] + b[i];
             }
         }
+    }
+
+    public static class MyThread2 extends Thread {
+        private int [] a , b , c ;
+        private int i , p , n;
+
+        public MyThread2(int [] a , int [] b , int [] c ,int i , int p,int n)  {
+            this.a = a;
+            this.b = b;
+            this.c = c;
+            this.i = i;
+            this.p = p;
+            this.n = n;
+        }
+
+        @Override
+        public void run() {
+            for (int pos = i ; pos < n ; pos = pos + p) {
+                c[pos] = a[pos] + b[pos];
+            }
+        }
+
     }
 
 }
