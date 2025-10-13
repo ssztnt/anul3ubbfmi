@@ -1,0 +1,6 @@
+[submodule "Sem1/Sem1/PPOC/sample-gradle-project"]
+	path = Sem1/Sem1/PPOC/sample-gradle-project
+	url = https://gitlab.com/ubb-mle5109/sample-gradle-project.git
+[submodule "Sem1/PPOC/sample-gradle-project"]
+	path = Sem1/PPOC/sample-gradle-project
+	url = https://gitlab.com/ubb-mle5109/sample-gradle-project.git
