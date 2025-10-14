@@ -1,2 +1,34 @@
 /* For information on how to create your own theme, please see:
 http://ionicframework.com/docs/theming/ */
+
+:root {
+  /* Flowers palette */
+  --flr-bg: #0b0b0c;
+  --flr-card: rgba(255,255,255,0.08);
+  --flr-tint: #6dd3a6;
+  --flr-rose: #ff7aa2;
+  --flr-lav: #b29cff;
+  --flr-leaf: #5ec082;
+  --flr-ivory: #f6f7f9;
+
+  /* Ionic color mapping */
+  --ion-color-primary: var(--flr-tint);
+  --ion-color-primary-rgb: 109,211,166;
+  --ion-color-primary-contrast: #000000;
+  --ion-color-primary-contrast-rgb: 0,0,0;
+  --ion-color-primary-shade: #5dc69c;
+  --ion-color-primary-tint: #7ad8b3;
+
+  --ion-color-secondary: var(--flr-rose);
+  --ion-color-tertiary: var(--flr-lav);
+  --ion-background-color: var(--flr-bg);
+  --ion-text-color: var(--flr-ivory);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --ion-background-color: #ffffff;
+    --ion-text-color: #0b0b0c;
+    --flr-card: rgba(0,0,0,0.06);
+  }
+}
