@@ -1,0 +1,60 @@
+╔══════════════════════════════════════════════════════════════╗
+║         CARS ANDROID APP - SETUP CHECKLIST                   ║
+╚══════════════════════════════════════════════════════════════╝
+
+Current Status:
+✅ Project files created
+✅ Mock server running on http://localhost:8080
+
+Next Steps:
+
+[ ] 1. INSTALL ANDROID STUDIO
+    → Download from: https://developer.android.com/studio
+    → Choose Mac (Apple Silicon) or Mac (Intel)
+    → Install to Applications folder
+    → Run first-time setup (takes ~10 minutes)
+
+[ ] 2. GET GOOGLE MAPS API KEY
+    → Go to: https://console.cloud.google.com/
+    → Create/select project
+    → Enable "Maps SDK for Android"
+    → Create API Key
+    → Copy the key (starts with "AIza...")
+
+[ ] 3. CONFIGURE API KEY
+    → Edit: local.properties (already created for you!)
+    → Replace: YOUR_MAPS_API_KEY_HERE
+    → With your actual key
+
+[ ] 4. OPEN PROJECT IN ANDROID STUDIO
+    → Open Android Studio
+    → Click "Open"
+    → Navigate to: /Users/plaiurares/Documents/Facultate/anul3ubbfmi/Sem1/MOBILE2
+    → Wait for Gradle sync (~2-5 minutes)
+
+[ ] 5. CREATE EMULATOR (OR USE PHYSICAL DEVICE)
+    → Click "Device Manager" in toolbar
+    → Create Device → Pixel 5
+    → System Image: API 34 (with Google APIs)
+    → Finish
+
+[ ] 6. RUN THE APP
+    → Click green Run button ▶️
+    → Select emulator/device
+    → Wait for app to install and launch
+
+[ ] 7. LOGIN AND TEST
+    → Email: demo@demo.com
+    → Password: demo1234
+    → Explore 5 sample cars!
+
+═══════════════════════════════════════════════════════════════
+
+Need detailed help? See: SETUP_INSTRUCTIONS.md
+
+Quick Commands:
+  - View files: open .
+  - Start server: ./gradlew :server:run
+  - Test server: curl http://localhost:8080/
+
+═══════════════════════════════════════════════════════════════

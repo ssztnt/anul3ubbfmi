@@ -1,5 +1,5 @@
 import localforage from 'localforage';
-import { Flower, OutboxItem } from '../types';
+import { Flower, OutboxItem, PaginatedResponse } from '../types';
 
 // Configure localforage
 localforage.config({
@@ -38,7 +38,7 @@ export async function cacheItemsPage(
   page: number,
   query: string,
   status: string,
-  data: any,
+  data: PaginatedResponse,
   category: string = ''
 ): Promise<void> {
   const key = getCacheKey(page, query, status, category);
@@ -53,9 +53,9 @@ export async function getCachedItemsPage(
   query: string,
   status: string,
   category: string = ''
-): Promise<any | null> {
+): Promise<PaginatedResponse | null> {
   const key = getCacheKey(page, query, status, category);
-  const cached = await localforage.getItem<{ data: any; timestamp: number }>(key);
+  const cached = await localforage.getItem<{ data: PaginatedResponse; timestamp: number }>(key);
   
   if (!cached) return null;
   
@@ -129,5 +129,48 @@ export async function updateOutboxItem(itemId: string, updates: Partial<OutboxIt
     outbox[index] = { ...outbox[index], ...updates };
     await localforage.setItem(OUTBOX_KEY, outbox);
   }
+}
+
+// ============================================================================
+// INDIVIDUAL FLOWER CACHE (for offline editing)
+// ============================================================================
+
+function getFlowerCacheKey(id: string): string {
+  return `flower_detail_${id}`;
+}
+
+export async function cacheFlowerDetail(flower: Flower): Promise<void> {
+  const key = getFlowerCacheKey(flower.id);
+  await localforage.setItem(key, {
+    data: flower,
+    timestamp: Date.now()
+  });
+}
+
+export async function getCachedFlowerDetail(id: string): Promise<Flower | null> {
+  const key = getFlowerCacheKey(id);
+  const cached = await localforage.getItem<{ data: Flower; timestamp: number }>(key);
+  
+  if (!cached) return null;
+  
+  // Cache expires after 30 minutes
+  const CACHE_TTL = 30 * 60 * 1000;
+  if (Date.now() - cached.timestamp > CACHE_TTL) {
+    await localforage.removeItem(key);
+    return null;
+  }
+  
+  return cached.data;
+}
+
+export async function removeCachedFlowerDetail(id: string): Promise<void> {
+  const key = getFlowerCacheKey(id);
+  await localforage.removeItem(key);
+}
+
+export async function clearFlowerDetailsCache(): Promise<void> {
+  const keys = await localforage.keys();
+  const flowerKeys = keys.filter(key => key.startsWith('flower_detail_'));
+  await Promise.all(flowerKeys.map(key => localforage.removeItem(key)));
 }
 

@@ -34,6 +34,7 @@ import {
   clearItemsCache,
   saveSearchState,
   getSearchState,
+  cacheFlowerDetail,
 } from '../services/storage';
 import NetworkStatusIndicator from '../components/NetworkStatusIndicator';
 import { staggerListAnimation } from '../animations/pageTransitions';
@@ -78,6 +79,7 @@ const FlowersList: React.FC = () => {
           else setFlowers(cached.items);
           setHasMore(cached.hasMore);
           setLoading(false);
+          // Note: flowers are already cached individually from when they were fetched online
           return;
         }
       }
@@ -92,6 +94,9 @@ const FlowersList: React.FC = () => {
 
       const response = await apiGet<PaginatedResponse>(`/flowers?${params}`);
       await cacheItemsPage(pageNum, query, status, response, category);
+
+      // Cache each individual flower for offline editing
+      await Promise.all(response.items.map(flower => cacheFlowerDetail(flower)));
 
       if (append) setFlowers((prev) => [...prev, ...response.items]);
       else setFlowers(response.items);
@@ -129,11 +134,15 @@ const FlowersList: React.FC = () => {
     const unsubCreated = webSocketService.on('flower:created', ({ flower }: { flower: Flower }) => {
       setFlowers((prev) => [flower, ...prev]);
       clearItemsCache();
+      // Cache the new flower for offline editing
+      cacheFlowerDetail(flower);
     });
 
     const unsubUpdated = webSocketService.on('flower:updated', ({ flower }: { flower: Flower }) => {
       setFlowers((prev) => prev.map(f => f.id === flower.id ? flower : f));
       clearItemsCache();
+      // Update the cached flower
+      cacheFlowerDetail(flower);
     });
 
     return () => { unsubCreated(); unsubUpdated(); };

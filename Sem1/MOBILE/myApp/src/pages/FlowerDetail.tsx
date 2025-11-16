@@ -18,6 +18,8 @@ import { createOutline, map as mapIcon } from 'ionicons/icons';
 import { useParams, useHistory } from 'react-router-dom';
 import { Flower } from '../types';
 import { apiGet } from '../services/api';
+import { networkStatusService } from '../services/network';
+import { cacheFlowerDetail, getCachedFlowerDetail } from '../services/storage';
 import MapPicker from '../components/MapPicker';
 import '../theme/flowers.css';
 
@@ -32,7 +34,29 @@ const FlowerDetail: React.FC = () => {
   useEffect(() => {
     const fetchFlower = async () => {
       try {
-        const data = await apiGet<Flower>(`/flowers/${id}`);
+        let data: Flower | null = null;
+        const isOnline = networkStatusService.getStatus() === 'online';
+
+        if (isOnline) {
+          // Try to fetch from API
+          try {
+            data = await apiGet<Flower>(`/flowers/${id}`);
+            // Cache the fetched data for offline use
+            await cacheFlowerDetail(data);
+          } catch (apiErr) {
+            console.warn('Failed to fetch from API, trying cache:', apiErr);
+            // If API fails, try to load from cache
+            data = await getCachedFlowerDetail(id);
+          }
+        } else {
+          // Offline: load from cache
+          data = await getCachedFlowerDetail(id);
+        }
+
+        if (!data) {
+          throw new Error('Flower not found. Please go online to load this flower.');
+        }
+
         setFlower(data);
       } catch (err: any) {
         setError(err.message || 'Failed to load flower');

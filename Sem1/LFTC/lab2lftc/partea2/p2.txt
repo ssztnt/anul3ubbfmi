@@ -1,0 +1,11 @@
+int main() {
+    int decimal = 123;
+    int negative = -456;
+    int hex = 0xFF;
+    int octal = 0777;
+    float real1 = 3.14;
+    float real2 = -2.5;
+    float scientific = 1.23e10;
+    return 0;
+}
+

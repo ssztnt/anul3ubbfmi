@@ -1,0 +1,18 @@
+Time averages over 10 runs (milliseconds)
+
+Dataset: N=M=10000, n=m=5
+
+Sequential (0 threads): In jur de 4600-4800ms , uneori mai cobora si la 2600-2800 doar daca rulam de mai multe ori 
+
+Row-Threads
+- 4 threads: 1300 ms aprox
+- 8 threads: 800-840ms aprox
+
+Column-Threads
+- 4 threads: 
+- 8 threads: 
+
+
+obs : c++ mai ok decat java 
+     daca avem inputs mici , e mai ok ca si timp static , cu atat mai mult cu cat cresc valorile , cand folosim threads vom avea mai multe dinamice 
+     

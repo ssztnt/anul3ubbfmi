@@ -1,0 +1,26 @@
+# ============================================
+# DFA FOARTE SIMPLU - Pentru Testare
+# ============================================
+# Accepta orice sir care contine cel putin un 'a'
+# 
+# Exemple ACCEPTATE: a, aa, ab, aab, ba, aaa, aba
+# Exemple RESPINSE: (sir vid), b, bb, bbb
+# ============================================
+
+STATES:
+q0, q1
+
+ALPHABET:
+a, b
+
+INITIAL:
+q0
+
+FINAL:
+q1
+
+TRANSITIONS:
+q0,a -> q1
+q0,b -> q0
+q1,a -> q1
+q1,b -> q1

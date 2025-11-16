@@ -1,0 +1,8 @@
+int myVar;
+int _temp;
+int count123;
+float x1y2z3;
+char myString;
+bool isValid;
+int a, b, c;
+

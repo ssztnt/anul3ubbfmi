@@ -1,0 +1,30 @@
+STATES:
+q0, q1, q2, q3, q4, qdead
+
+ALPHABET:
+a, b
+
+INITIAL:
+q0
+
+FINAL:
+q4
+
+TRANSITIONS:
+q0,a -> q1
+q0,b -> qdead
+
+q1,a -> q2
+q1,b -> qdead
+
+q2,a -> q2
+q2,b -> q3
+
+q3,b -> q4
+q3,a -> qdead
+
+q4,b -> q4
+q4,a -> qdead
+
+qdead,a -> qdead
+qdead,b -> qdead

@@ -1,0 +1,11 @@
+# This file contains local configuration for the Android project
+# Copy this to local.properties and fill in your actual values
+# NEVER commit local.properties to version control
+
+# Android SDK location
+# sdk.dir=/path/to/Android/sdk
+
+# Google Maps API Key
+# Get your key from: https://console.cloud.google.com/
+MAPS_API_KEY=YOUR_MAPS_API_KEY_HERE
+

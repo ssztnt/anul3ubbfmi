@@ -1,0 +1,6 @@
+# Test program cu erori lexicale
+int x = 5@;       # @ nu e valid
+float 123abc;     # nu poate incepe cu cifra
+int _valid = 0x;  # 0x incomplet
+char $bad;        # $ nu e valid
+

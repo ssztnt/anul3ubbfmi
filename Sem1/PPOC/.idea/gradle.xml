@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/sample-gradle-project" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/sample-gradle-project" />
+            <option value="$PROJECT_DIR$/sample-gradle-project/day1" />
+            <option value="$PROJECT_DIR$/sample-gradle-project/day2" />
+            <option value="$PROJECT_DIR$/sample-gradle-project/jmh" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

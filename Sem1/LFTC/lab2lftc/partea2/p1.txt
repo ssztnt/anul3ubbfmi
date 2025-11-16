@@ -1,0 +1,16 @@
+int main() {
+    int x;
+    int y;
+    float z;
+    
+    x = 10;
+    y = 20;
+    z = 3.14;
+    
+    if (x < y) {
+        write(x);
+    }
+    
+    return 0;
+}
+
