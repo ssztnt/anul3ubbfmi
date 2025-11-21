@@ -1,0 +1,16 @@
+main() {
+    int i;
+    int sum;
+    
+    i = 0;
+    sum = 0;
+    
+    cattimp (i) executa
+        sum = sum + i;
+        i = i + 1;
+        write(sum);
+    sfcattimp
+    
+    return 0;
+}
+

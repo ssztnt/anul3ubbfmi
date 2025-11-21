@@ -1,4 +1,4 @@
-main() {
+int main() {
     int decimal = 123;
     int negative = -456;
     int hex = 0xFF;

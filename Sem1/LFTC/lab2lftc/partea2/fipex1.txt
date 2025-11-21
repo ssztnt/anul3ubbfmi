@@ -1,0 +1,49 @@
+FORMA INTERNA A PROGRAMULUI (FIP)
+==================================
+
+Nr.	Cod Atom		Poz TS
+---	--------		------
+0	main		0
+1	(		0
+2	)		0
+3	{		0
+4	int		0
+5	ID		0
+6	;		0
+7	int		0
+8	ID		1
+9	;		0
+10	float		0
+11	ID		2
+12	;		0
+13	ID		0
+14	=		0
+15	CONST_INT		3
+16	;		0
+17	ID		1
+18	=		0
+19	CONST_INT		4
+20	;		0
+21	ID		2
+22	=		0
+23	CONST_INT		5
+24	.		0
+25	CONST_INT		6
+26	;		0
+27	if		0
+28	(		0
+29	ID		0
+30	<		0
+31	ID		1
+32	)		0
+33	{		0
+34	write		0
+35	(		0
+36	ID		0
+37	)		0
+38	;		0
+39	}		0
+40	return		0
+41	CONST_INT		7
+42	;		0
+43	}		0

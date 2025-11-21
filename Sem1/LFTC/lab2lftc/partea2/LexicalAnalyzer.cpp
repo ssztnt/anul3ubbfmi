@@ -12,7 +12,7 @@ LexicalAnalyzer::LexicalAnalyzer() : symbolTableIndex(0) {
         "int", "float", "char", "string", "bool",
         "if", "else", "while", "for", "do",
         "return", "void", "main",
-        "read", "write",
+        "read", "write", "print",  // ← ADĂUGAT 'print'
         "true", "false"
     };
     
@@ -79,14 +79,54 @@ bool LexicalAnalyzer::isDelimiterChar(char c) {
 
 void LexicalAnalyzer::skipWhitespace(const std::string& input, size_t& pos, 
                                       int& line, int& column) {
-    while (pos < input.length() && isWhitespace(input[pos])) {
-        if (input[pos] == '\n') {
-            line++;
-            column = 1;
-        } else {
-            column++;
+    while (pos < input.length()) {
+        // Skip whitespace
+        if (isWhitespace(input[pos])) {
+            if (input[pos] == '\n') {
+                line++;
+                column = 1;
+            } else {
+                column++;
+            }
+            pos++;
         }
-        pos++;
+        // Skip single-line comments //
+        else if (pos + 1 < input.length() && input[pos] == '/' && input[pos + 1] == '/') {
+            // Skip until end of line
+            while (pos < input.length() && input[pos] != '\n') {
+                pos++;
+                column++;
+            }
+            // Skip the newline too
+            if (pos < input.length() && input[pos] == '\n') {
+                pos++;
+                line++;
+                column = 1;
+            }
+        }
+        // Skip multi-line comments /* */
+        else if (pos + 1 < input.length() && input[pos] == '/' && input[pos + 1] == '*') {
+            pos += 2;
+            column += 2;
+            // Skip until we find */
+            while (pos + 1 < input.length()) {
+                if (input[pos] == '*' && input[pos + 1] == '/') {
+                    pos += 2;
+                    column += 2;
+                    break;
+                }
+                if (input[pos] == '\n') {
+                    line++;
+                    column = 1;
+                } else {
+                    column++;
+                }
+                pos++;
+            }
+        }
+        else {
+            break; // Not whitespace or comment
+        }
     }
 }
 

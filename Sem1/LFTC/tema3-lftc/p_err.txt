@@ -1,0 +1,8 @@
+int main() {
+    int 123abc;    // Eroare: identificator incepe cu cifra
+    int x@ = 5;    // Eroare: caracter invalid @
+    float $ = 3.14; 
+    int y = 0x;    
+    return 0;
+}
+

@@ -1,0 +1,17 @@
+
+
+main() {
+    int a;
+    int b;
+    int sum;
+    
+    read(a);
+    read(b);
+    
+    sum = a + b;
+    
+    write(sum);
+    
+    return 0;
+}
+

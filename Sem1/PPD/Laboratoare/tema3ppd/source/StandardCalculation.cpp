@@ -76,16 +76,16 @@ if (rank == 0) {
 
         int *firstNumber = new int[batchSize];
         int *secondNumber = new int[batchSize];
-
+        // worker primese numerele de la master
         MPI_Recv(firstNumber, batchSize,MPI_INT, 0, 0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
         MPI_Recv(secondNumber, batchSize,MPI_INT, 0, 1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
 
         int *result = new int[batchSize];
-
+        // worker calculeaza suma portiunii sale
 
         int carry = sum(firstNumber, secondNumber, result, batchSize);
 
-
+        // worker primeste carry de la procesul anterior
         if (rank > 1) {
             int receivedCarry;
             MPI_Recv(&receivedCarry, 1,MPI_INT, rank - 1, 4,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
@@ -94,13 +94,15 @@ if (rank == 0) {
                 carry+=receivedCarry;
             }
         }
-
+        // worker trimite carry la procesul urmator
         if (rank < (P - 1)) {
             MPI_Send(&carry, 1,MPI_INT, rank + 1, 4,MPI_COMM_WORLD);
         }
 
+        // worker trimite rezultatul la master
         MPI_Send(result, batchSize,MPI_INT, 0, 2,MPI_COMM_WORLD);
-        if (rank == P - 1) {
+        // worker trimite carry la master
+        if (rank == P - 1) { // daca este ultimul proces, trimite carry la master
             MPI_Send(&carry, 1,MPI_INT, 0, 3,MPI_COMM_WORLD);
         }
 

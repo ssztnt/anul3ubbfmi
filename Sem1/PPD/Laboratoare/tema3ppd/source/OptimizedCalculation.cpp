@@ -74,17 +74,17 @@ void OptimizedCalculation::calculator(int rank) {
 
         int *firstNumber = new int[batchSize];
         int *secondNumber = new int[batchSize];
-
+         // worker primese numerele de la master
         MPI_Recv(firstNumber, batchSize, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         MPI_Recv(secondNumber, batchSize, MPI_INT, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
         int *result = new int[batchSize];
 
-        // OPTIMIZATION: Start addition immediately without waiting for carry
+        // se adauga numerele fara a astepta carry la master
         int carry = sum(firstNumber, secondNumber, result, batchSize);
 
-        // Now receive carry from previous process and apply it
-        if (rank > 1) {
+            // worker primeste carry de la procesul anterior
+            if (rank > 1) {
             int receivedCarry;
             MPI_Recv(&receivedCarry, 1, MPI_INT, rank - 1, 4, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             if (receivedCarry > 0) {
@@ -94,12 +94,12 @@ void OptimizedCalculation::calculator(int rank) {
             }
         }
 
-        // Send carry to next process
+        // carry catre next
         if (rank < (P - 1)) {
             MPI_Send(&carry, 1, MPI_INT, rank + 1, 4, MPI_COMM_WORLD);
         }
 
-        // Send result to process 0
+        // results catre 0 
         MPI_Send(result, batchSize, MPI_INT, 0, 2, MPI_COMM_WORLD);
         if (rank == P - 1) {
             MPI_Send(&carry, 1, MPI_INT, 0, 3, MPI_COMM_WORLD);

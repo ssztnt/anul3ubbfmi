@@ -24,29 +24,29 @@ void ScatterCalculation::calculator(int rank) {
     int *first_loc = new int[dimension];
     int *second_loc = new int[dimension];
     int *result_loc = new int[dimension];
-
-    MPI_Scatter(firstNumber, dimension, MPI_INT, first_loc, dimension, MPI_INT, 0, MPI_COMM_WORLD);
+    // se distribuie simultan numerele la fiecare proces
+    MPI_Scatter(firstNumber, dimension, MPI_INT, first_loc, dimension, MPI_INT, 0, MPI_COMM_WORLD); // se distribuie simultan 
     MPI_Scatter(secondNumber, dimension, MPI_INT, second_loc, dimension, MPI_INT, 0, MPI_COMM_WORLD);
 
-    int carry = sum(first_loc, second_loc, result_loc, dimension);
+    int carry = sum(first_loc, second_loc, result_loc, dimension);// suma portiunii sale
 
     if (rank > 0) {
         int receivedCarry;
         MPI_Recv(&receivedCarry, 1,MPI_INT, rank - 1, 4,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
         if (receivedCarry > 0) {
             passCarry(result_loc, dimension, receivedCarry);
-            carry += receivedCarry;
+            carry += receivedCarry; // fiecare proces caculeaza suma portiunii sale si o trimite la procesul urmator
         }
     }
-
+    // worker trimite carry la procesul urmator
     if (rank < (P - 1)) {
         MPI_Send(&carry, 1,MPI_INT, rank + 1, 4,MPI_COMM_WORLD);
-    } else if (rank == P - 1 && P > 1) {
+    } else if (rank == P - 1 && P > 1) { // daca este ultimul proces, trimite carry la master
         MPI_Send(&carry, 1, MPI_INT, 0, 5, MPI_COMM_WORLD);
     }
-
+    // se colecteaza rezultatele la master
     MPI_Gather(result_loc, dimension, MPI_INT, result, dimension, MPI_INT, 0, MPI_COMM_WORLD);
-
+    // se scrie rezultatul la master
     if (rank == 0) {
         ofstream outS("resultScatter.txt");
         for (int i = 0; i < N_Max; i++) {

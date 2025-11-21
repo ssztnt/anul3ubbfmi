@@ -96,6 +96,7 @@ void AsyncCalculation::calculator(int rank) {
         outA.close();
     }
     else {
+        // worker primese numerele de la master
         MPI_Request requests[2];
         const int dimension = N_Max / (P - 1);
         const int extra = N_Max % (P - 1);
@@ -105,17 +106,17 @@ void AsyncCalculation::calculator(int rank) {
         int *secondNumber = new int[batchSize];
         int* result = new int[batchSize];
         
-        // Asynchronously receive digits from process 0
+        // worker primese numerele de la master
         MPI_Irecv(firstNumber, batchSize, MPI_INT, 0, 1, MPI_COMM_WORLD, &requests[0]);
         MPI_Irecv(secondNumber, batchSize, MPI_INT, 0, 2, MPI_COMM_WORLD, &requests[1]);
 
-        // Wait for both numbers to arrive before computing
+        // worker asteapta sa primeasca ambele numere inainte de a calcula suma
         MPI_Waitall(2, requests, MPI_STATUSES_IGNORE);
 
-        // Compute sum
+        // worker calculeaza suma portiunii sale
         int carry = sum(firstNumber, secondNumber, result, batchSize);
 
-        // Handle carry from previous process
+        // worker primeste carry de la procesul anterior
         if (rank > 1) {
             int receivedCarry = 0;
             MPI_Request carryRecvRequest;
@@ -128,19 +129,19 @@ void AsyncCalculation::calculator(int rank) {
             }
         }
         
-        // Send carry to next process
+        // worker trimite carry la procesul urmator
         if (rank < (P - 1)) {
             MPI_Request carrySendRequest;
             MPI_Isend(&carry, 1, MPI_INT, rank + 1, 5, MPI_COMM_WORLD, &carrySendRequest);
             MPI_Wait(&carrySendRequest, MPI_STATUS_IGNORE);
         }
 
-        // Send result back to process 0
+        // worker trimite rezultatul la master
         MPI_Request resultRequest;
         MPI_Isend(result, batchSize, MPI_INT, 0, 3, MPI_COMM_WORLD, &resultRequest);
         MPI_Wait(&resultRequest, MPI_STATUS_IGNORE);
         
-        // Last process sends final carry
+        // Last process sends final carry la master
         if (rank == P - 1) {
             MPI_Send(&carry, 1, MPI_INT, 0, 4, MPI_COMM_WORLD);
         }
